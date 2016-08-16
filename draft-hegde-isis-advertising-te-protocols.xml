@@ -6,6 +6,7 @@
 <!ENTITY RFC7916 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7916.xml">
 <!ENTITY RFC2205 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2205.xml">
 <!ENTITY RFC1195 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1195.xml">
+<!ENTITY RFC7752 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7752.xml">
 ]>
 <?rfc toc="yes"?>
 <?rfc tocompact="yes"?>
@@ -189,7 +190,7 @@ indicate what traffic engineering protocols are enabled on a link. </t>
 
 </section>
 
-<section title="Motivation" anchor='Motivation'>
+<section anchor="sec_motivation" title="Motivation">
 
 <t>The motivation of this document is to provide a mechanism to advertise 
 TE attributes for current and future applications without ambiguity. The 
@@ -200,12 +201,30 @@ scenarios.</t>
 <t>
 <list style="numbers">
 <t> Advertise TE attributes for the link for variety of applications.</t>
-<t> Allow the solution to be backward compatible so that nodes that do not understand the new advertisement do not
-    cause issues for existing RSVP deployment.</t>
+<t> Allow the solution to be backward compatible so that nodes that do 
+    not understand the new advertisement do not cause issues for existing RSVP deployment.</t>
 <t> Allow the solution to be extensible for any new applications that need to look at TE attributes.</t>
+<t> Allow the TE protocol enabled on a link to be communicated unambiguously. </t>
 
 </list>
 </t>
+
+<t> Communicating unambiguously which TE protocol is enabled on a link is 
+important to be able to share this informaation with other consumers through 
+other protocols, aside from just the IGP.  For example, for a 
+network that running both RSVP-TE and SR, it will be useful 
+to communicate which TE protocols are enabled on which links via 
+BGP-LS <xref target="RFC7752"/> to a central controller.  Typically,
+BGP-LS relies on the IGP to distribute IGP topology and traffic engineering
+information so that only a few BGP-LS sessions with the central controller
+are needed.  In order for a router running a BGP-LS session to 
+a central controller to correctly communicate what TE 
+protocols are enabled on the links in the IGP domain, that information
+first needs to be communicated unambiguously within the IGP itself.  As 
+ <xref target="fig_study"/> illustrates, that is currently not the case.
+</t>
+
+
 </section>
 
 <section title='Solution' anchor='solution'>
@@ -329,6 +348,17 @@ upgraded RSVP-TE ingress router to distingish between transit routers
 that have been upgraded and those that haven't, and behave 
 accordingly.</t> 
 
+<t> The use of the adminstrative group link attribute to prevent an 
+RSVP-TE ingress router from computing a path using a given link is
+an effective short term workaround to allow networks to incrementally upgrade 
+the routers to software that understands the new TE-protocol sub-TLV.
+We do not consider this workaround to be an effective long term solution
+because it relies on operator configuration that would have to be maintained
+in the long term.  As discussed in <xref target="sec_motivation"/>, continuing to
+have to infer which TE protocol is enabled on a link also limits our ability 
+to communicate this information using, for example, BGP-LS in an interoperable manner.
+</t>
+
 </section>
 
 <section title='Security Considerations' anchor='sec-con'>
@@ -364,6 +394,7 @@ helpful discissions on the topic of this draft.</t>
 <references title='Informative References'>
 &RFC7916;
 &RFC1195;
+&RFC7752;
 </references>
 
 </back>
