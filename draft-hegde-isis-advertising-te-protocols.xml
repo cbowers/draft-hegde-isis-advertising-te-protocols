@@ -289,7 +289,9 @@ receiving router to determine whether or not the sending router is
 capable of sending the TE protocol sub-TLV. It is used for backward 
 compatibility as described in <xref target="sec_back_compat"/>. </t> 
 
-
+<t> An implementation that supports the TE protocol sub-TLV SHOULD be able to 
+advertise TE sub-TLVs without enabling RSVP-TE signalling on
+the link. </t>
 
 </section>
 
