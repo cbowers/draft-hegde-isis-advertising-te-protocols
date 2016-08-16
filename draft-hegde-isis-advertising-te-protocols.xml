@@ -286,8 +286,22 @@ ignored on receipt. </t>
 TLV 22 MUST advertise the TE protocol sub-TLV in TLV 22 for that link, 
 even when both the RSVP and SR flags are set to zero. This allows a 
 receiving router to determine whether or not the sending router is 
-capable of sending the TE protocol sub-TLV. It is used for backward 
-compatibility as described in <xref target="sec_back_compat"/>. </t> 
+capable of sending the TE protocol sub-TLV. </t> 
+
+<t> A router supporting the TE protocol sub-TLV which receives
+an advertisement for a link containing TLV 22 with 
+the TE protocol sub-TLV present SHOULD respect the values of the 
+flags in the TE protocol sub-TLV. The receiving router SHOULD only 
+consider links with a given TE protocol enabled for inclusion in 
+a path using that TE protocol.  For example, links for which 
+the TE protocol sub-TLV is present, but for which the RSVP-TE flag 
+is not set to one, should not be included in any RSVP-TE CSPF 
+computations on the receiving router.</t> 
+
+<t> The ability for a receiving router to determine whether or not the 
+sending router is capable of sending the TE protocol sub-TLV is also 
+used for backward compatibility as described in <xref 
+target="sec_back_compat"/>. </t> 
 
 <t> An implementation that supports the TE protocol sub-TLV SHOULD be able to 
 advertise TE sub-TLVs without enabling RSVP-TE signalling on
