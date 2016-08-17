@@ -13,8 +13,6 @@ Or the bitlified version of the above URL: http://bit.ly/2bc6zMq
 And this should produce a diff of the most recently published ietf draft, and the latest version in the repository.
 https://tools.ietf.org/rfcdiff?url1=draft-hegde-isis-advertising-te-protocols.txt&url2=http://bit.ly/2bc6zMq
 
-Or the bitlified version of the above URL: http://bit.ly/2bg41ek
-
 If that doesn't work, paste the raw github content URL into the xml2rfc tool at:
 http://xml2rfc.tools.ietf.org/
 
