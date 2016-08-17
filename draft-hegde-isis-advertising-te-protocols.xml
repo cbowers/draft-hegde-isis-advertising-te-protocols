@@ -206,10 +206,13 @@ scenarios.</t>
     not understand the new advertisement do not cause issues for existing RSVP deployment.</t>
 <t> Allow the solution to be extensible for any new applications that need to look at TE attributes.</t>
 <t> Allow the TE protocol enabled on a link to be communicated unambiguously. </t>
+<t> The solution should try to limit any increases to the quantity and size of link 
+	state advertisements.</t>
 
 </list>
 </t>
 
+<section anchor="sec_unambiguous" title="Explicit and unambiguous indication of TE protocol">
 <t> Communicating unambiguously which TE protocol is enabled on a link is 
 important to be able to share this information with other consumers through 
 other protocols, aside from just the IGP.  For example, for a 
@@ -224,7 +227,24 @@ protocols are enabled on the links in the IGP domain, that information
 first needs to be communicated unambiguously within the IGP itself.  As 
  <xref target="fig_study"/> illustrates, that is currently not the case.
 </t>
+</section>
 
+<section anchor="sec_limit_increases" title="Limit increases in link state advertisements">
+<t> Over the years, the size of the networks running IS-IS has grown 
+both in terms of the total number of nodes as well as the number of 
+links interconnecting those nodes. IS-IS has proven to be quite 
+scalable, running in very large networks to simultaneously support 
+routing of IPv4 and IPv6 traffic, as well as the distribution of MPLS 
+traffic engineering information. With the advent of cloud scale 
+computing, we expect the demands placed on IS-IS by network operators to 
+continue to grow as networks become larger and more richly 
+interconnected. If we expect IS-IS to continue to scale to meet this 
+challenge, then as we evolve IS-IS, we should be careful to limit the 
+increases in both the quantity and size of link state advertisements to 
+the amount necessary to solve the problem at hand. The solution 
+described in this draft attempts to do that. 
+</t>
+</section>
 
 </section>
 
