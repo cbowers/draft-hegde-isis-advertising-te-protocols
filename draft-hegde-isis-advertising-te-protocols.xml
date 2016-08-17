@@ -151,8 +151,9 @@ implementation X, Y, or Z to infer that RSVP signalling is enabled on a link"
 align="center">
 <artwork align="center">
 +--------+--------------------------------------------+
-| TLV/   | Sub-TLV name                | X  | Y  | Z  |
-|sub-TLV |                             |    |    |    |
+| TLV/   | Sub-TLV name                |Implementation|
+|sub-TLV |                             +--------------+
+|        |                             | X  | Y  | Z  |
 +--------+--------------------------------------------+
 |22      |Extended IS Reachability TLV | N  | N  | N  |
 |22/3    |Administrative group (color) | N  | Y  | Y  |
@@ -210,7 +211,7 @@ scenarios.</t>
 </t>
 
 <t> Communicating unambiguously which TE protocol is enabled on a link is 
-important to be able to share this informaation with other consumers through 
+important to be able to share this information with other consumers through 
 other protocols, aside from just the IGP.  For example, for a 
 network that running both RSVP-TE and SR, it will be useful 
 to communicate which TE protocols are enabled on which links via 
