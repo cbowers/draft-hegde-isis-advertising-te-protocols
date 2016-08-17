@@ -248,7 +248,7 @@ described in this draft attempts to do that.
 
 </section>
 
-<section title='Solution' anchor='solution'>
+<section title='Solution' anchor='sec_solution'>
 
 <section title='Traffic-engineering protocol sub-TLV'>
 
@@ -342,9 +342,11 @@ depending on whether the router that doesn't understand the
 new TE protocol sub-TLV is an RSVP-TE ingress router or an RSVP-TE transit router.  
 </t> 
 
-<t> Suppose we have an upgraded transit router that explicitly indicates 
+<section anchor="sec_upgraded_transit" title='Scenario with upgraded RSVP-TE transit 
+router but RSVP-TE ingress router not upgraded'>
+<t> An upgraded RSVP-TE transit router is able to explicitly indicate
 that RSVP is not enabled on a link by advertising the TE protocol 
-sub-TLV with the RSVP flag set to zero. An RSVP-TE ingress router that 
+sub-TLV with the RSVP flag set to zero. However, an RSVP-TE ingress router that 
 has not been upgraded to understand the new TE protocol sub-TLV will not 
 understand that RSVP-TE is not enabled on the link, and may include the 
 link on a path computed for RSVP-TE. When the network tries to signal 
@@ -368,33 +370,57 @@ that do not have RSVP enabled. Once the entire network domain is
 upgraded to understand the TE protocol sub-TLV in this draft, the 
 configuration involving the RSVP-not-enabled admin group is no longer 
 needed for this network.</t> 
+</section>
 
+<section anchor="sec_upgraded_ingress" title='Scenario with upgraded RSVP-TE ingress 
+router but RSVP-TE transit router not upgraded'>
  <t> The other scenario to consider is when the RSVP-TE ingress router 
-has been upgraded to understand the TE protocol sub-TLV, but an RSVP-TE 
-transit router has not. In this case, the transit router is not capable 
-of sending the TE protocol sub-TLV. If the RSVP-TE ingress router 
-understands that the transit router is not capable of sending the TE 
-protocol sub-TLV, then it can continue inferring whether or not RSVP-TE 
-is enabled on the transit router links based on the presence of TE 
-sub-TLVs, as it does today. We require an upgraded router to send the TE 
-protocol sub-TLV if it sends TLV 22, even when both the RSVP and SR 
-flags are set to zero. This allows the receiving router to interpret the 
-absence of the TE-protocol sub-TLV together with presence of TLV 22 to 
-mean that the sending router has not been upgraded. This allows the 
-upgraded RSVP-TE ingress router to distingish between transit routers 
-that have been upgraded and those that haven't, and behave 
-accordingly.</t> 
+has been upgraded to understand the TE protocol sub-TLV, but the RSVP-TE 
+transit router has not. In this case, the transit router has not been 
+upgraded, so it is not yet capable of sending the TE protocol sub-TLV.  If
+the transit router has RSVP-TE enabled on a link, we would like for the RSVP-TE
+ingress router to still be able to use the link for RSVP-TE paths.
+While it is possible to describe a solution for this scenario that 
+makes use of administrative groups, we describe a simpler solution below.</t>
 
+<t> The solution for this scenario relies on the following observation. 
+If the RSVP-TE ingress router can understand that the transit router is 
+not capable of sending the TE protocol sub-TLV, then it can continue 
+inferring whether or not RSVP-TE is enabled on the transit router links 
+based on the presence of TE sub-TLVs, just as it does today.</t> 
+
+<t> To accomplish this, we require an upgraded router to send the TE 
+protocol sub-TLV if it sends TLV 22, even when both the RSVP and SR 
+flags are set to zero, see <xref target="sec_solution"/>. This allows 
+the receiving router to interpret the absence of the TE-protocol sub-TLV 
+together with presence of TLV 22 to mean that the sending router has not 
+been upgraded. This allows the upgraded RSVP-TE ingress router to 
+distinguish between transit routers that have been upgraded and those 
+that haven't. When the transit router has been upgraded, then the 
+RSVP-TE ingress router uses the information in the TE protocol sub-TLV. 
+When the transit router has not been upgraded, then RSVP-TE ingress 
+router contines to infer whether or not RSVP-TE is enabled on the 
+transit router links based on the presence of TE sub-TLVs, just as it 
+does today. The solution for this scenario requires no configuration on 
+the part of network operators.</t> 
+
+</section>
+
+<section anchor="sec_need_for_long_term" title='Need for a long term solution'>
 <t> The use of the adminstrative group link attribute to prevent an 
 RSVP-TE ingress router from computing a path using a given link is
 an effective short term workaround to allow networks to incrementally upgrade 
 the routers to software that understands the new TE-protocol sub-TLV.
-We do not consider this workaround to be an effective long term solution
+One might also consider a long term solution based solely on the use 
+of operator-defined adminstrative groups to communicate the TE protocol enabled
+on a link.  However, we do not consider this workaround to be an effective long term solution
 because it relies on operator configuration that would have to be maintained
 in the long term.  As discussed in <xref target="sec_motivation"/>, continuing to
 have to infer which TE protocol is enabled on a link also limits our ability 
-to communicate this information using, for example, BGP-LS in an interoperable manner.
+to communicate this information unambiguously in an interoperable manner for use
+by other applications such as central controllers.
 </t>
+</section>
 
 </section>
 
