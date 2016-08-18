@@ -77,6 +77,20 @@
 </address>
 </author>
 
+<author fullname="Spencer Giacalone" initials="S." surname="Giacalone">
+<organization>Microsoft</organization>
+<address>
+<postal>
+<street>One Microsoft Way</street>
+<city>Redmond</city>
+<region>WA</region>
+<code>98052</code>
+<country>US</country>
+</postal>
+<email>Spencer.Giacalone@microsoft.com</email>
+</address>
+</author>
+
 <author fullname="Imtiyaz Mohammad" initials="I." surname="Mohammad">
 <organization>Arista Networks</organization>
 <address>
@@ -303,21 +317,23 @@ indicate that Segment Routing is not enabled on a link.</t>
 <t> All undefined flags MUST be set to zero on transmit and 
 ignored on receipt. </t> 
 
-<t> An implementation that supports the TE protocol sub-TLV and sends 
-TLV 22 MUST advertise the TE protocol sub-TLV in TLV 22 for that link, 
-even when both the RSVP and SR flags are set to zero. This allows a 
-receiving router to determine whether or not the sending router is 
-capable of sending the TE protocol sub-TLV. </t> 
+<t> An implementation that supports the TE protocol sub-TLV and sends TLV 
+22 MUST advertise the TE protocol sub-TLV in TLV 22 for that link, even 
+when both the RSVP and SR flags are set to zero. In other words, 
+whenever the TE protocol sub-TLV is supported, it MUST be sent, even if 
+no TE protocols are enabled on the link. This allows a receiving router 
+to determine whether or not the sending router is capable of sending the 
+TE protocol sub-TLV. </t> 
 
 <t> A router supporting the TE protocol sub-TLV which receives
 an advertisement for a link containing TLV 22 with 
 the TE protocol sub-TLV present SHOULD respect the values of the 
 flags in the TE protocol sub-TLV. The receiving router SHOULD only 
 consider links with a given TE protocol enabled for inclusion in 
-a path using that TE protocol.  For example, links for which 
-the TE protocol sub-TLV is present, but for which the RSVP-TE flag 
-is not set to one, should not be included in any RSVP-TE CSPF 
-computations on the receiving router.</t> 
+a path using that TE protocol.  Conversely, links for which 
+the TE protocol sub-TLV is present, but for which the TE protocol flag 
+is not set to one, SHOULD NOT be included in any TE CSPF 
+computations on the receiving router for the protocol in question.</t> 
 
 <t> The ability for a receiving router to determine whether or not the 
 sending router is capable of sending the TE protocol sub-TLV is also 
@@ -391,7 +407,9 @@ based on the presence of TE sub-TLVs, just as it does today.</t>
 
 <t> To accomplish this, we require an upgraded router to send the TE 
 protocol sub-TLV if it sends TLV 22, even when both the RSVP and SR 
-flags are set to zero, see <xref target="sec_solution"/>. This allows 
+flags are set to zero.  In other words, whenever the TE protocol sub-TLV 
+is supported, it MUST be sent, even if no TE protocols are enabled on the link.
+  see <xref target="sec_solution"/>. This allows 
 the receiving router to interpret the absence of the TE-protocol sub-TLV 
 together with presence of TLV 22 to mean that the sending router has not 
 been upgraded. This allows the upgraded RSVP-TE ingress router to 
