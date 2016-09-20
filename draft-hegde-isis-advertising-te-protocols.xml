@@ -333,7 +333,12 @@ consider links with a given TE protocol enabled for inclusion in
 a path using that TE protocol.  Conversely, links for which 
 the TE protocol sub-TLV is present, but for which the TE protocol flag 
 is not set to one, SHOULD NOT be included in any TE CSPF 
-computations on the receiving router for the protocol in question.</t> 
+computations on the receiving router for the protocol in question.</t>
+
+<t>However, if the SR protocol flag is set to zero on a link but the 
+adjacency-sids are advertised for that link, applications MAY use 
+the adjacency-sid for other purposes, for example OAM.
+</t> 
 
 <t> The ability for a receiving router to determine whether or not the 
 sending router is capable of sending the TE protocol sub-TLV is also 
