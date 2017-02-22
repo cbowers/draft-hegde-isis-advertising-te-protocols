@@ -230,7 +230,7 @@ scenarios.</t>
 <t> Communicating unambiguously which TE protocol is enabled on a link is 
 important to be able to share this information with other consumers through 
 other protocols, aside from just the IGP.  For example, for a 
-network that running both RSVP-TE and SR, it will be useful 
+network running both RSVP-TE and SR, it will be useful 
 to communicate which TE protocols are enabled on which links via 
 BGP-LS <xref target="RFC7752"/> to a central controller.  Typically,
 BGP-LS relies on the IGP to distribute IGP topology and traffic engineering
@@ -266,7 +266,7 @@ described in this draft attempts to do that.
 
 <section title='Traffic-engineering protocol sub-TLV'>
 
-<t> A new sub-TLV Traffic-engineering protocol sub-TLV is added in the 
+<t> A new Traffic-engineering protocol sub-TLV is added in the 
 TLV 22 <xref target="RFC5305"/> or TLV 222 to indicate the protocols 
 enabled on the link.  The sub-TLV has flags in the value field to indicate 
 the protocol enabled on the link. The length field is variable to allow 
