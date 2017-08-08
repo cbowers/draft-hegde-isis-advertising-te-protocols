@@ -200,29 +200,23 @@ In this way, implementations will not have to infer whether or not RSVP
 is enabled based on the presence of different sub-TLVs, but can use the 
 explicit indication. When network operators want to use a non-RSVP 
 traffic engineering application (such as IP/LDP FRR or segment routing), 
-they will be able to advertise traffic engineer sub-TLVs and explicitly 
+they will be able to advertise traffic engineering sub-TLVs and explicitly 
 indicate what traffic engineering protocols are enabled on a link. </t> 
 
 </section>
 
-<section anchor="sec_motivation" title="Motivation">
-
-<t>The motivation of this document is to provide a mechanism to advertise 
-TE attributes for current and future applications without ambiguity. The 
-following objectives help to accomplish this in a range of deployment 
-scenarios.</t> 
-
+<section anchor="sec_motivation" title="Goals">
 
 <t>
 <list style="numbers">
-<t> Advertise TE attributes for the link for variety of applications.</t>
-<t> Allow the solution to be backward compatible so that nodes that do 
-    not understand the new advertisement do not cause issues for existing RSVP deployment.</t>
-<t> Allow the solution to be extensible for any new applications that need to look at TE attributes.</t>
-<t> Allow the TE protocol enabled on a link to be communicated unambiguously. </t>
+<t> The solution should allow the TE protocol enabled on a link to be communicated unambiguously. </t>
+<t> The solution should decouple the advertisement of which TE protocols are enabled on a link from 
+    the advertisement of other TE attributes.</t>
+<t> The solution should be backward compatible so that nodes that do 
+    not understand the new advertisement do not cause issues for existing RSVP deployments.</t>
+<t> The solution should be extensible for new protocols.</t>
 <t> The solution should try to limit any increases to the quantity and size of link 
 	state advertisements.</t>
-
 </list>
 </t>
 
@@ -240,23 +234,6 @@ a central controller to correctly communicate what TE
 protocols are enabled on the links in the IGP domain, that information
 first needs to be communicated unambiguously within the IGP itself.  As 
  <xref target="fig_study"/> illustrates, that is currently not the case.
-</t>
-</section>
-
-<section anchor="sec_limit_increases" title="Limit increases in link state advertisements">
-<t> Over the years, the size of the networks running IS-IS has grown 
-both in terms of the total number of nodes as well as the number of 
-links interconnecting those nodes. IS-IS has proven to be quite 
-scalable, running in very large networks to simultaneously support 
-routing of IPv4 and IPv6 traffic, as well as the distribution of MPLS 
-traffic engineering information. With the advent of cloud scale 
-computing, we expect the demands placed on IS-IS by network operators to 
-continue to grow as networks become larger and more richly 
-interconnected. If we expect IS-IS to continue to scale to meet this 
-challenge, then as we evolve IS-IS, we should be careful to limit the 
-increases in both the quantity and size of link state advertisements to 
-the amount necessary to solve the problem at hand. The solution 
-described in this draft attempts to do that. 
 </t>
 </section>
 
@@ -335,11 +312,6 @@ the TE protocol sub-TLV is present, but for which the TE protocol flag
 is not set to one, SHOULD NOT be included in any TE CSPF 
 computations on the receiving router for the protocol in question.</t>
 
-<t>However, if the SR protocol flag is set to zero on a link but the 
-adjacency-sids are advertised for that link, applications MAY use 
-the adjacency-sid for other purposes, for example OAM.
-</t> 
-
 <t> The ability for a receiving router to determine whether or not the 
 sending router is capable of sending the TE protocol sub-TLV is also 
 used for backward compatibility as described in <xref 
@@ -351,7 +323,32 @@ the link. </t>
 
 </section>
 
+<section anchor="sec_sr_flag" title='Segment Routing flag considerations'>
+<t>The Segment Routing (SR) architecture assumes that the SR topology is 
+congruent with the IGP topology. The path described by a prefix segment 
+is computed using the SPF algorithm applied to the IGP topology, which 
+is the same as the SR topology.  Therefore, the presence or absence of 
+the Segment Routing flag MUST NOT be interpreted as modifying the SR 
+topology, which is always congruent with the IGP topology. 
+</t> 
+
+<t>It is however useful for a centralized application (or an ingress 
+router) to know whether or not it should expect to be able to forward 
+traffic over a given link using labels distributed via SR. If a link is 
+advertised with the TE protocol sub-TLV and the SR flag set to zero, 
+then a centralized application can assume that traffic sent with a 
+prefix segment whose path crosses that link is unlikely to be forwarded 
+across that link. With this information, a centralized application can 
+decide to use a different path for that traffic by using a different 
+label stack. 
+</t> 
+
 </section>
+
+
+</section>
+
+
 <section anchor="sec_back_compat" title='Backward compatibility'>
 <t>Routers running older software that do not understand the new 
 Traffic-Engineering protocol sub-TLV will continue to interpret the 
@@ -462,8 +459,8 @@ than those discussed in <xref target="RFC1195"/> and <xref target="RFC5305"/>.
  <t> i) Traffic-engineering Protocol sub-tlv = Suggested value 40</t>
 </section>
 <section title='Acknowledgements'>
-<t>The authors thank Alia Atlas and Les Ginsberg for  
-helpful discissions on the topic of this draft.</t> 
+<t>The authors thank Alia Atlas, Les Ginsberg, and Peter Psenak for  
+helpful discussions on the topic of this draft.</t> 
 
 </section>
 
